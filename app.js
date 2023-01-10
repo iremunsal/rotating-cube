@@ -4,8 +4,8 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 var scene, camera, renderer, orbitControls;
-var WIDTH  = window.innerWidth;
-var HEIGHT = window.innerHeight;
+var width = window.innerWidth;
+var height = window.innerHeight;
 var cube2 = null;
 var cube1 = null;
 var group = new THREE.Group();
@@ -13,7 +13,7 @@ var rotateUp = true;
 var targetAngle = 0;
 var angle = 0;
 var pi = Math.PI;
-var zRot = 0;
+var zRotation = 0;
 
 function init() {
     scene = new THREE.Scene();
@@ -38,9 +38,10 @@ function initLight(){
 }
 
 function initCamera() {
-    camera = new THREE.PerspectiveCamera(40, WIDTH / HEIGHT, 1, 1000);
+    camera = new THREE.PerspectiveCamera(40, width/height, 1, 1000);
 }
 
+//for camera movement
 function initControls() {
     orbitControls = new OrbitControls(camera, renderer.domElement);
     orbitControls.object.position.set(-1, 0, 10);
@@ -56,7 +57,7 @@ function initRenderer() {
     renderer.setSize( window.innerWidth,  window.innerHeight);
 }
 
-
+//loading the rotateable cube
 function initModel() {
     var material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
     const loader = new GLTFLoader()
@@ -71,7 +72,6 @@ function initModel() {
             }
         
         })
-
         group = new THREE.Group();
         group.add(cube1)
         scene.add(group)
@@ -79,6 +79,7 @@ function initModel() {
    
 }
 
+//loading the second cube
 function initModel2() {
     var material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
     const loader = new GLTFLoader()
@@ -101,41 +102,47 @@ const button = document.getElementById('button');
 button.addEventListener('click', changeAngle);
 function changeAngle() {
     const inputField = document.getElementById('angleInput');
-    angle = Math.sign(targetAngle - zRot) / 50 ;
+    angle = Math.sign(targetAngle - zRotation) / 50 ;
     targetAngle += inputField.value * (pi/180);
 }
 
 function rotateCube() {
-    if ( !rotateUp && zRot + angle > 0){
+    if ( !rotateUp && zRotation + angle > 0)
+    {
         rotateUp = true
     }
-    else if (rotateUp && zRot + angle < 0 ){
+    else if (rotateUp && zRotation + angle < 0 )
+    {
         rotateUp = false
     }
     
-    if ( rotateUp ){
+
+    if ( rotateUp )
+    {
         cube1.position.set(1,-1,0);
         group.position.set(-1, 1, 0);
-        zRot += angle;
-        zRot = MathUtils.clamp(zRot, 0, Math.min(targetAngle, 180 * (pi/180)));
+        zRotation += angle;
+        zRotation = MathUtils.clamp(zRotation, 0, Math.min(targetAngle, 180 * (pi/180)));
     }
-    else {
+    else 
+    {
         cube1.position.set(1,1,0);
         group.position.set(-1, -1, 0);
-        zRot += angle;
-        zRot = MathUtils.clamp(zRot, Math.max(targetAngle, -180 * (pi/180)), 0);
+        zRotation += angle;
+        zRotation = MathUtils.clamp(zRotation, Math.max(targetAngle, -180 * (pi/180)), 0);
     }
     
-    group.rotation.z = zRot
-   
-
+    group.rotation.z = zRotation
 }
 
 function render() {
     requestAnimationFrame(render);
-    if(cube1){
+
+    if(cube1)
+    {
         rotateCube();
     }
+    
     renderer.render(scene, camera);
 }
 

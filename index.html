@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>rotating cube</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       
+    </head>
+    <body>
+        <div class="flex-container">
+            <input type="text" id="angleInput">
+            <input type="button" value="Rotate" id="button">      
+        </div>
+
+       
+        <script type="importmap">
+			{
+				"imports": {
+					"three": "./three.js-master/build/three.module.js",
+					"three/addons/": "./three.js-master/examples/jsm/"
+				}
+			}
+		</script>
+
+        <script type="module" src="app.js" defer></script>
+  
+    </body>
+</html>
